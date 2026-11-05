@@ -1,18 +1,18 @@
-# --- settings before `project()` ---
+# ----- SETTINGS BEFORE `project()` -----
 
-cmake_minimum_required(VERSION 3.13) # minimum supported CMake version
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # generate compile_commands.json for clangd / Neovim
-include(pico_sdk_import.cmake) # import the Pico SDK before configuring the compiler
+# minimum supported CMake version
+cmake_minimum_required(VERSION 3.13)
 
-# --- project configuration and SDK setup ---
+# generate compile_commands.json for clangd / Neovim
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# define project name, version, and enabled languages
-project(rp2040_trigger_controller
-  VERSION 0.1.0
-  LANGUAGES C CXX ASM
-)
+# import the Pico SDK before configuring the compiler
+include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-# specify language standards
+# ----- PROJECT CONFIGURATION AND SDK SETUP -----
+
+# define project name, enabled languages and their standards
+project(blinky C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -30,21 +30,17 @@ endif()
 # initialize the Pico SDK
 pico_sdk_init()
 
-# --- application target settings ---
+# ----- APPLICATION TARGET SETTINGS -----
 
 # define the application executable and its source files
-add_executable(${PROJECT_NAME} src/main.c)
+add_executable(${PROJECT_NAME} main.c)
 
-# link required pico sdk libraries
+# generate additional firmware output formats (map/bin/hex/uf2 files)
+pico_add_extra_outputs(${PROJECT_NAME})
+
+# link to pico_stdlib library (for gpio, time, etc. functions)
 target_link_libraries(${PROJECT_NAME} PRIVATE pico_stdlib)
-
-# configure stdio backends for printf()
-pico_enable_stdio_uart(${PROJECT_NAME} 1)
-pico_enable_stdio_usb(${PROJECT_NAME} 0)
 
 # embed application identity and version metadata
 pico_set_program_name(${PROJECT_NAME} "${PROJECT_NAME}")
 pico_set_program_version(${PROJECT_NAME} "${PROJECT_VERSION}")
-
-# generate additional firmware output formats
-pico_add_extra_outputs(${PROJECT_NAME})
