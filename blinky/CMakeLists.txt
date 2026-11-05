@@ -1,13 +1,8 @@
 # --- settings before `project()` ---
 
-# minimum supported CMake version
-cmake_minimum_required(VERSION 3.13)
-
-# generate compile_commands.json for clangd / Neovim
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# import the Pico SDK before configuring the compiler
-include(pico_sdk_import.cmake)
+cmake_minimum_required(VERSION 3.13) # minimum supported CMake version
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # generate compile_commands.json for clangd / Neovim
+include(pico_sdk_import.cmake) # import the Pico SDK before configuring the compiler
 
 # --- project configuration and SDK setup ---
 
