@@ -1,17 +1,18 @@
 #include "pico/stdlib.h"
 
-#define LED_DELAY_MS 100
+#define LED_DELAY_MS 50u
+#define STATUS_LED_PIN 25u
 
 // Initialize the GPIO for the LED
 static void init_led(void) {
-  gpio_init(PICO_DEFAULT_LED_PIN);
-  gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
+  gpio_init(STATUS_LED_PIN);
+  gpio_set_dir(STATUS_LED_PIN, GPIO_OUT);
 }
 
 // Turn the LED on or off
 static void set_led(bool led_on) {
   // Just set the GPIO on or off
-  gpio_put(PICO_DEFAULT_LED_PIN, led_on);
+  gpio_put(STATUS_LED_PIN, led_on);
 }
 
 int main(void) {
