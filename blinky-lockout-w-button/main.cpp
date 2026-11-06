@@ -77,6 +77,7 @@ int main(void) {
         led_turn_on_at_ms = now;
         set_led(true);
       }
+      break;
     case PlaybackState::PLAYING:
       // debounce just for logging
       debounce_button(now);
@@ -84,6 +85,9 @@ int main(void) {
         set_led(false);
         state = PlaybackState::IDLE;
       }
+      break;
+    default:
+      break;
     }
   }
 }
