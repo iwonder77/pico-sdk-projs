@@ -23,7 +23,7 @@ static void init_pins(void) {
 static void set_led(bool led_on) { gpio_put(STATUS_LED_PIN, led_on); }
 
 // returns true if our active-low button is pressed (reads low)
-bool button_is_pressed() { return !gpio_get(BUTTON_INPUT_PIN); }
+static bool button_is_pressed(void) { return !gpio_get(BUTTON_INPUT_PIN); }
 
 int main(void) {
   stdio_init_all();
@@ -42,7 +42,7 @@ int main(void) {
     bool raw_pressed = button_is_pressed();
 
     if (raw_pressed != last_raw_pressed) {
-      // raw reading changed, restart stopwatch here
+      // raw reading changed (possibly a bounce), restart stopwatch here
       raw_changed_at_ms = now;
       last_raw_pressed = raw_pressed;
     }
@@ -50,15 +50,14 @@ int main(void) {
     if (raw_pressed != stable_pressed &&
         now - raw_changed_at_ms > BUTTON_DEBOUNCE_MS) {
       // enough time has passed since button changed state, update stable
-      // reading variable and proceed to detecting event (falling or rising
-      // edge)
+      // reading variable and proceed to detecting event (press or release)
       stable_pressed = raw_pressed;
-      if (stable_pressed == true) {
+      if (stable_pressed) {
         // press event was detected, update count and print it
         press_count++;
         printf("PRESSED! count: %u\n", press_count);
       } else {
-        // otherwise button was released (rising edge)
+        // otherwise button was released
         printf("RELEASED!\n");
       }
       // turn on LED
