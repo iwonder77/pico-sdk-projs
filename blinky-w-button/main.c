@@ -29,9 +29,10 @@ int main(void) {
   int press_count = 0;
   stdio_init_all();
   sleep_ms(10000);
-  bool previous_reading, current_reading = gpio_get(BUTTON_INPUT_PIN);
-  printf("---PICO BLINKY STARTUP LINE---\n");
   init_pins();
+  bool previous_reading = gpio_get(BUTTON_INPUT_PIN);
+  bool current_reading = gpio_get(BUTTON_INPUT_PIN);
+  printf("---PICO BLINKY STARTUP LINE---\n");
   while (true) {
     current_reading = gpio_get(BUTTON_INPUT_PIN);
     if (current_reading != previous_reading && current_reading == 0) {
